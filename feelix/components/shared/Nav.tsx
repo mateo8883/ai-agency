@@ -74,7 +74,7 @@ export default function Nav() {
         ))}
       </ul>
 
-      <div className="hidden md:flex items-center gap-3">
+      <div className="flex items-center gap-2 md:gap-3">
         <button
           onClick={toggle}
           style={{

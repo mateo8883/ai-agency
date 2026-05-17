@@ -110,7 +110,7 @@ function drawDashboard(canvas: HTMLCanvasElement, tr: CanvasTr) {
 
 function TableDevice({ label }: { label: string }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
+    <div className="fx-scale-device" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
       <div style={{ position: 'relative' }}>
         <div style={{ position: 'absolute', bottom: -20, left: '50%', transform: 'translateX(-50%)', width: '72%', height: 28, background: 'radial-gradient(ellipse, rgba(0,0,0,0.7) 0%, transparent 70%)', filter: 'blur(10px)' }} />
         <div style={{
@@ -159,7 +159,7 @@ function LaptopMockup({ tr }: { tr: CanvasTr }) {
   useEffect(() => { if (canvasRef.current) drawDashboard(canvasRef.current, tr) }, [tr])
 
   return (
-    <div style={{ width: 420, userSelect: 'none' as const }}>
+    <div className="fx-scale-device" style={{ width: 420, userSelect: 'none' as const }}>
       <div style={{
         background: '#181715', borderRadius: '14px 14px 0 0',
         border: '2px solid rgba(255,255,255,0.07)', borderBottom: 'none',
@@ -239,7 +239,7 @@ export default function HowItWorks() {
     return () => { gsap.ticker.remove(tick); st.kill() }
   }, [])
 
-  const colCopy: React.CSSProperties = { flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 72px', gap: 22 }
+  const colCopy: React.CSSProperties = { flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 clamp(20px, 6vw, 72px)', gap: 22 }
   const colDevice: React.CSSProperties = { flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }
   const stepLabel = (text: string, color: string) => (
     <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: '0.65rem', letterSpacing: '0.14em', color, textTransform: 'uppercase' as const }}>{text}</span>

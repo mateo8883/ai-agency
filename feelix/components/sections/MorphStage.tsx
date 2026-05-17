@@ -74,9 +74,10 @@ export default function MorphStage() {
       if (dashIntroRef.current) gsap.set(dashIntroRef.current, { opacity: introFade, y: (1 - introFade) * 32 })
 
       const morph = phase(p, 0.18, 0.82)
-      const heroOffsetX = window.innerWidth * 0.22
-      const heroSpread  = 165
-      const heroScale   = 1.65
+      const isMobile    = window.innerWidth < 768
+      const heroOffsetX = isMobile ? 0 : window.innerWidth * 0.22
+      const heroSpread  = isMobile ? Math.min(94, window.innerWidth * 0.26) : 165
+      const heroScale   = isMobile ? 1.15 : 1.65
       const dashScale   = 0.55
 
       const dotFade = 1 - phase(p, 0.62, 0.80)
@@ -124,7 +125,7 @@ export default function MorphStage() {
           <BackgroundBeams />
         </div>
 
-        <div ref={heroCopyRef} style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '45%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 24, padding: '0 64px', zIndex: 5 }}>
+        <div ref={heroCopyRef} className="fx-hero-copy" style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '45%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 24, padding: '0 64px', zIndex: 5 }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(245,198,17,0.08)', border: '1px solid rgba(245,198,17,0.22)', borderRadius: 100, padding: '5px 14px 5px 10px', alignSelf: 'flex-start' }}>
             <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#F5C611', flexShrink: 0 }} />
             <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500, fontSize: '0.65rem', letterSpacing: '0.1em', textTransform: 'uppercase' as const, color: '#F5C611' }}>{t.hero.label}</span>

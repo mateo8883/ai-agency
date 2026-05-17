@@ -117,7 +117,7 @@ export default function LiveDemo() {
         pointerEvents: 'none', willChange: 'opacity, transform',
       }} />
 
-      <div style={{ maxWidth: 900, margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 48 }}>
+      <div style={{ maxWidth: 900, margin: '0 auto', padding: '0 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 48 }}>
 
         {/* Header — real copy from translations */}
         <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 18 }}>
@@ -134,7 +134,7 @@ export default function LiveDemo() {
         </div>
 
         {/* Device + surface */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0, perspective: '900px' }}>
+        <div className="fx-scale-device" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0, perspective: '900px' }}>
 
           {/* Device body */}
           <div style={{
@@ -206,7 +206,7 @@ export default function LiveDemo() {
         </div>
 
         {/* Cards — animate in as each button is pressed */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20, width: '100%' }}>
+        <div className="fx-cards-1col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20, width: '100%' }}>
           {t.buttons.map(({ color, glow, title, desc }, i) => (
             <motion.div
               key={i}
