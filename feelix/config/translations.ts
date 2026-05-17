@@ -1,6 +1,6 @@
 const es = {
   nav: {
-    links: ['Producto', 'Contacto'] as string[],
+    links: ['Producto', 'Contáctanos'] as string[],
     cta: 'Comenzar',
   },
   hero: {
@@ -64,12 +64,12 @@ const es = {
     submit: 'Háblanos', sending: 'Enviando…',
     successToast: '¡Listo! Te escribimos pronto.', errorToast: 'Algo falló. Intenta de nuevo.',
   },
-  footer: { links: ['Producto', 'Contacto'] as string[] },
+  footer: { links: ['Producto', 'Contáctanos'] as string[] },
 }
 
 const en: typeof es = {
   nav: {
-    links: ['Product', 'Contact'],
+    links: ['Product', 'Contact Us'],
     cta: 'Get Started',
   },
   hero: {
@@ -133,7 +133,7 @@ const en: typeof es = {
     submit: 'Talk to us', sending: 'Sending…',
     successToast: "We'll be in touch soon!", errorToast: 'Something went wrong. Please try again.',
   },
-  footer: { links: ['Product', 'Contact'] },
+  footer: { links: ['Product', 'Contact Us'] },
 }
 
 export const translations = { es, en }

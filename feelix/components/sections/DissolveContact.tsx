@@ -35,8 +35,10 @@ const DOT_CONFIG = [
   { color: '#F5C611', base: [-LOGO_R * Math.sin(2 * Math.PI / 3), -LOGO_R * 0.5, 0] as [number,number,number], fallMult: 1.15 },
 ]
 
-const DUST_COUNT     = 60
-const SCATTER_COUNT  = 35    // per dot
+// Lighter particle load + lower DPR on phones (GPU-bound R3F scene)
+const IS_MOBILE = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches
+const DUST_COUNT     = IS_MOBILE ? 26 : 60
+const SCATTER_COUNT  = IS_MOBILE ? 16 : 35    // per dot
 
 const makeSchema = (c: { nameError: string; emailError: string; messageError: string }) =>
   z.object({
@@ -312,8 +314,8 @@ export default function DissolveContact() {
           <Canvas
             style={{ position: 'absolute', inset: 0 }}
             camera={{ position: [0, 0.5, 5], fov: 50, near: 0.01, far: 80 }}
-            dpr={[1, 2]}
-            gl={{ alpha: true, antialias: true }}
+            dpr={IS_MOBILE ? [1, 1.5] : [1, 2]}
+            gl={{ alpha: true, antialias: !IS_MOBILE }}
           >
             <Suspense fallback={null}>
               <Scene progressRef={progressRef} />
