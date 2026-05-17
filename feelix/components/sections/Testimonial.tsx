@@ -54,7 +54,7 @@ export default function Testimonial() {
             fontSize: '0.65rem', letterSpacing: '0.14em',
             textTransform: 'uppercase', color: '#2EB84B',
           }}>
-            What owners say
+            Lo que dicen los dueños
           </span>
 
           <blockquote style={{ margin: 0 }}>

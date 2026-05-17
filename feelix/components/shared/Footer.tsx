@@ -1,5 +1,9 @@
 'use client'
-import { footer } from '@/config/site'
+import { useLang } from '@/context/LanguageContext'
+import { translations } from '@/config/translations'
+
+// Stable anchors, independent of the (translated) link labels
+const FOOTER_ANCHORS = ['#producto', '#contact']
 
 function FeelixLogo() {
   return (
@@ -20,6 +24,9 @@ function FeelixLogo() {
 }
 
 export default function Footer() {
+  const { lang } = useLang()
+  const footer = translations[lang].footer
+
   return (
     <footer
       style={{
@@ -36,10 +43,10 @@ export default function Footer() {
         <FeelixLogo />
 
         <nav style={{ display: 'flex', alignItems: 'center', gap: 32, flexWrap: 'wrap' }}>
-          {footer.links.map(link => (
+          {footer.links.map((link, i) => (
             <a
               key={link}
-              href={`#${link.toLowerCase()}`}
+              href={FOOTER_ANCHORS[i] ?? '#'}
               style={{
                 fontFamily: 'Space Grotesk, sans-serif', fontWeight: 400,
                 fontSize: '0.875rem', color: 'rgba(245,240,232,0.35)',

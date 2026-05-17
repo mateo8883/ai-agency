@@ -3,7 +3,8 @@ import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { createNoise3D } from 'simplex-noise'
-import { hero, dashboard } from '@/config/site'
+import { useLang } from '@/context/LanguageContext'
+import { translations } from '@/config/translations'
 import { BackgroundBeams } from '@/components/ui/background-beams'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -11,9 +12,9 @@ gsap.registerPlugin(ScrollTrigger)
 const noise = createNoise3D()
 
 const BTNS = [
-  { color: '#E63946', label: 'Alerts',   value: 14  },
+  { color: '#E63946', label: 'Alertas',  value: 14  },
   { color: '#F5C611', label: 'Neutral',  value: 38  },
-  { color: '#2EB84B', label: 'Positive', value: 247 },
+  { color: '#2EB84B', label: 'Positivo', value: 247 },
 ]
 
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v))
@@ -21,15 +22,18 @@ const phase = (p: number, a: number, b: number) => clamp((p - a) / (b - a), 0, 1
 const lerp  = (a: number, b: number, t: number) => a + (b - a) * t
 
 export default function MorphStage() {
-  const sectionRef   = useRef<HTMLDivElement>(null)
-  const heroCopyRef  = useRef<HTMLDivElement>(null)
-  const dashIntroRef = useRef<HTMLDivElement>(null)
-  const beamsWrapRef = useRef<HTMLDivElement>(null)
-  const buttonRefs   = useRef<(HTMLDivElement | null)[]>([])
-  const cardRefs     = useRef<(HTMLDivElement | null)[]>([])
-  const valueRefs    = useRef<(HTMLSpanElement | null)[]>([])
-  const labelRefs    = useRef<(HTMLDivElement | null)[]>([])
-  const endPos       = useRef<{ x: number; y: number }[]>([{ x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }])
+  const { lang } = useLang()
+  const t = translations[lang]
+
+  const sectionRef    = useRef<HTMLDivElement>(null)
+  const heroCopyRef   = useRef<HTMLDivElement>(null)
+  const dashIntroRef  = useRef<HTMLDivElement>(null)
+  const beamsWrapRef  = useRef<HTMLDivElement>(null)
+  const buttonRefs    = useRef<(HTMLDivElement | null)[]>([])
+  const cardRefs      = useRef<(HTMLDivElement | null)[]>([])
+  const valueRefs     = useRef<(HTMLSpanElement | null)[]>([])
+  const labelRefs     = useRef<(HTMLDivElement | null)[]>([])
+  const endPos        = useRef<{ x: number; y: number }[]>([{ x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }])
 
   useEffect(() => {
     const section = sectionRef.current
@@ -60,7 +64,7 @@ export default function MorphStage() {
       const p = st.progress ?? 0
 
       const heroFade = phase(p, 0.15, 0.38)
-      if (heroCopyRef.current) gsap.set(heroCopyRef.current, { opacity: 1 - heroFade, y: -heroFade * 40 })
+      if (heroCopyRef.current)   gsap.set(heroCopyRef.current,   { opacity: 1 - heroFade, y: -heroFade * 40 })
 
       const beamPeak = phase(p, 0.28, 0.55)
       const beamSettle = phase(p, 0.65, 0.90)
@@ -121,11 +125,14 @@ export default function MorphStage() {
         </div>
 
         <div ref={heroCopyRef} style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '45%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 24, padding: '0 64px', zIndex: 5 }}>
-          <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500, fontSize: '0.65rem', letterSpacing: '0.1em', textTransform: 'uppercase' as const, color: '#F5C611' }}>{hero.label}</span>
-          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: 'clamp(2.4rem, 5.5vw, 4.8rem)', lineHeight: 1.05, letterSpacing: '-0.04em', color: '#F5F0E8', margin: 0 }}>
-            Turn <span style={{ opacity: 0.55 }}>unhappy</span> customers<br />into loyal customers.
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(245,198,17,0.08)', border: '1px solid rgba(245,198,17,0.22)', borderRadius: 100, padding: '5px 14px 5px 10px', alignSelf: 'flex-start' }}>
+            <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#F5C611', flexShrink: 0 }} />
+            <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500, fontSize: '0.65rem', letterSpacing: '0.1em', textTransform: 'uppercase' as const, color: '#F5C611' }}>{t.hero.label}</span>
+          </div>
+          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: 'clamp(2.4rem, 5.5vw, 4.8rem)', lineHeight: 1.05, letterSpacing: '-0.04em', color: '#F5F0E8', margin: 0, whiteSpace: 'pre-line' as const }}>
+            {t.hero.headline}
           </h1>
-          <p style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: '1.0625rem', lineHeight: 1.7, color: 'rgba(245,240,232,0.5)', maxWidth: '22ch', margin: 0 }}>{hero.body}</p>
+          <p style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: '1.0625rem', lineHeight: 1.7, color: 'rgba(245,240,232,0.5)', maxWidth: '22ch', margin: 0 }}>{t.hero.body}</p>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginTop: 8 }}>
             <a
@@ -141,7 +148,7 @@ export default function MorphStage() {
               onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
               onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
             >
-              {hero.cta}
+              {t.hero.cta}
             </a>
             <a
               href="#how-it-works"
@@ -153,14 +160,18 @@ export default function MorphStage() {
               onMouseEnter={e => (e.currentTarget.style.color = 'rgba(245,240,232,0.9)')}
               onMouseLeave={e => (e.currentTarget.style.color = 'rgba(245,240,232,0.55)')}
             >
-              {hero.ctaSecondary}
+              {t.hero.ctaSecondary}
             </a>
           </div>
+
         </div>
 
-        <div ref={dashIntroRef} style={{ position: 'absolute', left: '50%', top: '10%', transform: 'translateX(-50%)', width: 'min(640px, 88vw)', opacity: 0, textAlign: 'center', display: 'flex', flexDirection: 'column', gap: 16, zIndex: 5 }}>
-          <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500, fontSize: '0.65rem', letterSpacing: '0.12em', textTransform: 'uppercase' as const, color: '#F5C611' }}>{dashboard.label}</span>
-          <h2 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', lineHeight: 1.08, letterSpacing: '-0.04em', color: '#F5F0E8', margin: 0, whiteSpace: 'pre-line' as const }}>{dashboard.headline}</h2>
+        <div ref={dashIntroRef} style={{ position: 'absolute', left: '50%', top: '10%', transform: 'translateX(-50%)', width: 'min(640px, 88vw)', opacity: 0, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, zIndex: 5 }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(245,198,17,0.08)', border: '1px solid rgba(245,198,17,0.22)', borderRadius: 100, padding: '5px 14px 5px 10px' }}>
+            <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#F5C611', flexShrink: 0 }} />
+            <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500, fontSize: '0.65rem', letterSpacing: '0.12em', textTransform: 'uppercase' as const, color: '#F5C611' }}>{t.dashboard.label}</span>
+          </div>
+          <h2 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', lineHeight: 1.08, letterSpacing: '-0.04em', color: '#F5F0E8', margin: 0, whiteSpace: 'pre-line' as const }}>{t.dashboard.headline}</h2>
         </div>
 
         <div style={{ position: 'absolute', left: '50%', top: '58%', transform: 'translate(-50%, -50%)', width: 'min(880px, 92vw)', zIndex: 3 }}>

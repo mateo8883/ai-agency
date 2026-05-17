@@ -3,9 +3,13 @@
 import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { nav } from '@/config/site'
+import { useLang } from '@/context/LanguageContext'
+import { translations } from '@/config/translations'
 
 gsap.registerPlugin(ScrollTrigger)
+
+// Stable anchors, independent of the (translated) link labels
+const NAV_ANCHORS = ['#producto', '#contact']
 
 function FeelixLogo() {
   return (
@@ -25,13 +29,15 @@ function FeelixLogo() {
 }
 
 export default function Nav() {
+  const { lang, toggle } = useLang()
+  const nav = translations[lang].nav
   const navRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     const el = navRef.current
     if (!el) return
 
-    ScrollTrigger.create({
+    const st = ScrollTrigger.create({
       start: 'top -60',
       onEnter: () => {
         el.style.backdropFilter = 'blur(16px)'
@@ -43,7 +49,7 @@ export default function Nav() {
       },
     })
 
-    return () => { ScrollTrigger.getAll().forEach(t => t.kill()) }
+    return () => { st.kill() }
   }, [])
 
   return (
@@ -55,10 +61,10 @@ export default function Nav() {
       <FeelixLogo />
 
       <ul className="hidden md:flex items-center gap-8">
-        {nav.links.map((link) => (
+        {nav.links.map((link, i) => (
           <li key={link}>
             <a
-              href={`#${link.toLowerCase()}`}
+              href={NAV_ANCHORS[i] ?? '#'}
               style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 400, fontSize: '0.9375rem', color: '#F5F0E8' }}
               className="opacity-70 hover:opacity-100 transition-opacity duration-200"
             >
@@ -68,21 +74,45 @@ export default function Nav() {
         ))}
       </ul>
 
-      <a
-        href="#contact"
-        className="hidden md:flex items-center"
-        style={{
-          fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700,
-          fontSize: '0.875rem', letterSpacing: '-0.01em',
-          background: '#2EB84B', color: '#0A0A08',
-          borderRadius: 100, padding: '10px 24px',
-          textDecoration: 'none', transition: 'opacity 0.2s',
-        }}
-        onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
-        onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
-      >
-        {nav.cta}
-      </a>
+      <div className="hidden md:flex items-center gap-3">
+        <button
+          onClick={toggle}
+          style={{
+            fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600,
+            fontSize: '0.75rem', letterSpacing: '0.08em',
+            color: 'rgba(245,240,232,0.45)',
+            background: 'rgba(245,240,232,0.06)',
+            border: '1px solid rgba(245,240,232,0.1)',
+            borderRadius: 100, padding: '6px 14px',
+            transition: 'all 0.2s',
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.color = 'rgba(245,240,232,0.9)'
+            e.currentTarget.style.borderColor = 'rgba(245,240,232,0.22)'
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.color = 'rgba(245,240,232,0.45)'
+            e.currentTarget.style.borderColor = 'rgba(245,240,232,0.1)'
+          }}
+        >
+          {lang === 'es' ? 'EN' : 'ES'}
+        </button>
+
+        <a
+          href="#contact"
+          style={{
+            fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700,
+            fontSize: '0.875rem', letterSpacing: '-0.01em',
+            background: '#2EB84B', color: '#0A0A08',
+            borderRadius: 100, padding: '10px 24px',
+            textDecoration: 'none', transition: 'opacity 0.2s',
+          }}
+          onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
+          onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+        >
+          {nav.cta}
+        </a>
+      </div>
 
     </nav>
   )

@@ -2,7 +2,8 @@
 import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { whyItWorks } from '@/config/site'
+import { useLang } from '@/context/LanguageContext'
+import { translations } from '@/config/translations'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -34,6 +35,9 @@ const ICONS = {
 }
 
 export default function WhyItWorks() {
+  const { lang } = useLang()
+  const whyItWorks = translations[lang].whyItWorks
+
   const sectionRef = useRef<HTMLDivElement>(null)
   const headRef    = useRef<HTMLDivElement>(null)
   const cardsRef   = useRef<(HTMLDivElement | null)[]>([])

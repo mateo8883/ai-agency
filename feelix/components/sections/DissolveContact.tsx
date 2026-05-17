@@ -13,6 +13,8 @@ import emailjs from '@emailjs/browser'
 import { toast } from 'sonner'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import { useLang } from '@/context/LanguageContext'
+import { translations } from '@/config/translations'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -36,12 +38,13 @@ const DOT_CONFIG = [
 const DUST_COUNT     = 60
 const SCATTER_COUNT  = 35    // per dot
 
-const schema = z.object({
-  name:    z.string().min(2,  'Name must be at least 2 characters'),
-  email:   z.string().email('Enter a valid email address'),
-  message: z.string().min(10, 'Message must be at least 10 characters'),
-})
-type FormData = z.infer<typeof schema>
+const makeSchema = (c: { nameError: string; emailError: string; messageError: string }) =>
+  z.object({
+    name:    z.string().min(2,  c.nameError),
+    email:   z.string().email(c.emailError),
+    message: z.string().min(10, c.messageError),
+  })
+type FormData = z.infer<ReturnType<typeof makeSchema>>
 
 // ── Ambient dust field ────────────────────────────────────────
 function AmbientDust({ progressRef }: { progressRef: { current: number } }) {
@@ -228,6 +231,10 @@ function Scene({ progressRef }: { progressRef: { current: number } }) {
 
 // ── Main component ────────────────────────────────────────────
 export default function DissolveContact() {
+  const { lang } = useLang()
+  const t = translations[lang].contact
+  const schema = useMemo(() => makeSchema(t), [t])
+
   const sectionRef  = useRef<HTMLDivElement>(null)
   const canvasRef   = useRef<HTMLDivElement>(null)
   const contactRef  = useRef<HTMLDivElement>(null)
@@ -272,10 +279,10 @@ export default function DissolveContact() {
         { from_name: data.name, from_email: data.email, message: data.message },
         EMAILJS_KEY,
       )
-      toast.success("We'll be in touch soon!")
+      toast.success(t.successToast)
       reset()
     } catch {
-      toast.error('Something went wrong. Please try again.')
+      toast.error(t.errorToast)
     } finally {
       setSending(false)
     }
@@ -327,39 +334,42 @@ export default function DissolveContact() {
           <div style={{ width: '100%', maxWidth: 460, display: 'flex', flexDirection: 'column', gap: 44 }}>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              <span style={{
-                fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500,
-                fontSize: '0.65rem', letterSpacing: '0.16em',
-                textTransform: 'uppercase' as const, color: '#F5C611',
-              }}>
-                One press. One connection.
-              </span>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(245,198,17,0.08)', border: '1px solid rgba(245,198,17,0.22)', borderRadius: 100, padding: '5px 14px 5px 10px', alignSelf: 'flex-start' }}>
+                <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#F5C611', flexShrink: 0 }} />
+                <span style={{
+                  fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500,
+                  fontSize: '0.65rem', letterSpacing: '0.16em',
+                  textTransform: 'uppercase' as const, color: '#F5C611',
+                }}>
+                  {t.label}
+                </span>
+              </div>
               <h2 style={{
                 fontFamily: 'Lora, serif', fontStyle: 'italic', fontWeight: 400,
                 fontSize: 'clamp(1.9rem, 4vw, 2.8rem)', lineHeight: 1.15,
-                letterSpacing: '-0.01em', color: '#F5F0E8', margin: 0,
+                letterSpacing: '-0.01em', color: '#F5F0E8', margin: 0, whiteSpace: 'pre-line' as const,
               }}>
-                Let&apos;s build something<br />together.
+                {t.headline}
               </h2>
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
-                <label style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: '0.74rem', color: 'rgba(245,240,232,0.38)', letterSpacing: '0.08em', textTransform: 'uppercase' as const }}>Name</label>
-                <Input {...register('name')} placeholder="Your name" style={{ ...fieldStyle, height: 46 }} />
+                <label style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: '0.74rem', color: 'rgba(245,240,232,0.38)', letterSpacing: '0.08em', textTransform: 'uppercase' as const }}>{t.nameLabel}</label>
+                <Input {...register('name')} placeholder={t.namePlaceholder} style={{ ...fieldStyle, height: 46 }} />
                 {errors.name && <span style={errStyle}>{errors.name.message}</span>}
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
-                <label style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: '0.74rem', color: 'rgba(245,240,232,0.38)', letterSpacing: '0.08em', textTransform: 'uppercase' as const }}>Email</label>
-                <Input {...register('email')} type="email" placeholder="you@restaurant.com" style={{ ...fieldStyle, height: 46 }} />
+                <label style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: '0.74rem', color: 'rgba(245,240,232,0.38)', letterSpacing: '0.08em', textTransform: 'uppercase' as const }}>{t.emailLabel}</label>
+                <Input {...register('email')} type="email" placeholder={t.emailPlaceholder} style={{ ...fieldStyle, height: 46 }} />
                 {errors.email && <span style={errStyle}>{errors.email.message}</span>}
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
-                <label style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: '0.74rem', color: 'rgba(245,240,232,0.38)', letterSpacing: '0.08em', textTransform: 'uppercase' as const }}>Message</label>
-                <Textarea {...register('message')} placeholder="Tell us about your restaurant…" rows={4} style={{ ...fieldStyle, resize: 'none' as const }} />
+                <label style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: '0.74rem', color: 'rgba(245,240,232,0.38)', letterSpacing: '0.08em', textTransform: 'uppercase' as const }}>{t.messageLabel}</label>
+                <Textarea {...register('message')} placeholder={t.messagePlaceholder} rows={4} style={{ ...fieldStyle, resize: 'none' as const }} />
                 {errors.message && <span style={errStyle}>{errors.message.message}</span>}
               </div>
 
@@ -373,11 +383,10 @@ export default function DissolveContact() {
                   fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700,
                   fontSize: '0.9375rem', letterSpacing: '-0.01em',
                   border: 'none', borderRadius: 100, padding: '14px 40px',
-                  cursor: sending ? 'not-allowed' : 'pointer',
                   transition: 'all 0.2s',
                 }}
               >
-                {sending ? 'Sending…' : 'Talk to us'}
+                {sending ? t.sending : t.submit}
               </button>
 
             </form>

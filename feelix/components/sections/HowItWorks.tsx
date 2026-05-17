@@ -2,8 +2,12 @@
 import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useLang } from '@/context/LanguageContext'
+import { translations } from '@/config/translations'
 
 gsap.registerPlugin(ScrollTrigger)
+
+type CanvasTr = typeof translations['es']['howItWorks']['canvas']
 
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v))
 const phase = (p: number, a: number, b: number) => clamp((p - a) / (b - a), 0, 1)
@@ -22,7 +26,7 @@ function rr(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: n
   ctx.closePath()
 }
 
-function drawDashboard(canvas: HTMLCanvasElement) {
+function drawDashboard(canvas: HTMLCanvasElement, tr: CanvasTr) {
   const ctx = canvas.getContext('2d')
   if (!ctx) return
   const W = canvas.width, H = canvas.height
@@ -38,12 +42,12 @@ function drawDashboard(canvas: HTMLCanvasElement) {
 
   ctx.fillStyle = 'rgba(245,240,232,0.88)'
   ctx.font = '600 11px "Space Grotesk", sans-serif'
-  ctx.fillText('Live Activity', 32, 26)
+  ctx.fillText(tr.title, 32, 26)
 
   ctx.fillStyle = 'rgba(245,240,232,0.28)'
   ctx.font = '10px "Space Grotesk", sans-serif'
   ctx.textAlign = 'right'
-  ctx.fillText('Now', W - 14, 26)
+  ctx.fillText(tr.now, W - 14, 26)
   ctx.textAlign = 'left'
 
   ctx.strokeStyle = 'rgba(245,240,232,0.05)'
@@ -53,11 +57,8 @@ function drawDashboard(canvas: HTMLCanvasElement) {
   ctx.lineTo(W, 38)
   ctx.stroke()
 
-  const rows = [
-    { color: '#E63946', label: 'Table 7',  type: 'Alert',    time: '0:45' },
-    { color: '#F5C611', label: 'Table 3',  type: 'Neutral',  time: '2:10' },
-    { color: '#2EB84B', label: 'Table 11', type: 'Positive', time: '3:02' },
-  ]
+  const colors = ['#E63946', '#F5C611', '#2EB84B']
+  const rows = tr.rows.map((r, i) => ({ color: colors[i], label: r.label, type: r.type, time: ['0:45', '2:10', '3:02'][i] }))
 
   rows.forEach(({ color, label, type, time }, i) => {
     const y = 62 + i * 34
@@ -79,7 +80,7 @@ function drawDashboard(canvas: HTMLCanvasElement) {
 
     ctx.fillStyle = 'rgba(245,240,232,0.28)'
     ctx.textAlign = 'right'
-    ctx.fillText(time + ' ago', W - 14, y + 4)
+    ctx.fillText(time + ' ' + tr.ago, W - 14, y + 4)
     ctx.textAlign = 'left'
 
     if (i < rows.length - 1) {
@@ -104,58 +105,58 @@ function drawDashboard(canvas: HTMLCanvasElement) {
 
   ctx.fillStyle = 'rgba(245,240,232,0.32)'
   ctx.font = '9px "Space Grotesk", sans-serif'
-  ctx.fillText('avg. response  2m 14s', 12, bY - 7)
+  ctx.fillText(tr.avgResponse, 12, bY - 7)
 }
 
-function PhoneMockup() {
+function TableDevice({ label }: { label: string }) {
   return (
-    <div style={{
-      width: 190, height: 384,
-      background: '#181715',
-      borderRadius: 44,
-      border: '2px solid rgba(255,255,255,0.08)',
-      padding: 10,
-      boxShadow: '0 48px 96px rgba(0,0,0,0.7), inset 0 0 0 1px rgba(255,255,255,0.03)',
-    }}>
-      <div style={{
-        background: '#0A0A08', borderRadius: 36, height: '100%',
-        overflow: 'hidden', display: 'flex', flexDirection: 'column',
-        padding: '32px 14px 18px', position: 'relative',
-      }}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
+      <div style={{ position: 'relative' }}>
+        <div style={{ position: 'absolute', bottom: -20, left: '50%', transform: 'translateX(-50%)', width: '72%', height: 28, background: 'radial-gradient(ellipse, rgba(0,0,0,0.7) 0%, transparent 70%)', filter: 'blur(10px)' }} />
         <div style={{
-          position: 'absolute', top: 12, left: '50%', transform: 'translateX(-50%)',
-          width: 64, height: 9, background: '#181715',
-          border: '1px solid rgba(255,255,255,0.06)', borderRadius: 10,
-        }} />
-        <div style={{
-          textAlign: 'center', color: '#F5F0E8',
-          fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: 30,
-          letterSpacing: '-0.04em', marginTop: 4, marginBottom: 20,
-        }}>2:14</div>
-        <div style={{
-          background: 'rgba(230,57,70,0.12)', border: '1px solid rgba(230,57,70,0.28)',
-          borderRadius: 14, padding: '10px 12px',
+          width: 300, height: 172,
+          background: 'linear-gradient(160deg, #2A2825 0%, #181715 60%, #111110 100%)',
+          borderRadius: 44,
+          border: '1.5px solid rgba(255,255,255,0.07)',
+          boxShadow: '0 40px 80px rgba(0,0,0,0.8), 0 8px 24px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+          gap: 22, padding: '20px 32px', position: 'relative', overflow: 'hidden',
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 6 }}>
-            <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#E63946', flexShrink: 0 }} />
-            <span style={{ color: '#F5F0E8', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: 9, textTransform: 'uppercase' as const, letterSpacing: '0.1em' }}>Feelix Alert</span>
+          <div style={{ position: 'absolute', top: 0, left: '15%', right: '15%', height: 1, background: 'rgba(255,255,255,0.07)' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+            <svg width="22" height="9" viewBox="0 0 22 9" fill="none">
+              <circle cx="2.5"  cy="4.5" r="2.5" fill="#E63946" opacity="0.45" />
+              <circle cx="11"   cy="4.5" r="2.5" fill="#F5C611" opacity="0.45" />
+              <circle cx="19.5" cy="4.5" r="2.5" fill="#2EB84B" opacity="0.45" />
+            </svg>
+            <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: '0.55rem', color: 'rgba(245,240,232,0.22)', letterSpacing: '0.12em', textTransform: 'uppercase' as const }}>feelix</span>
           </div>
-          <p style={{ color: 'rgba(245,240,232,0.62)', fontFamily: 'Space Grotesk, sans-serif', fontSize: 9, lineHeight: 1.65, margin: '0 0 9px' }}>
-            Table 7 — Guest left unhappy.<br />Respond before they leave.
-          </p>
-          <div style={{ display: 'flex', gap: 6 }}>
-            <div style={{ flex: 1, background: '#E63946', borderRadius: 7, padding: '5px 0', textAlign: 'center' as const, color: '#fff', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: 8 }}>Respond</div>
-            <div style={{ flex: 1, background: 'rgba(245,240,232,0.05)', border: '1px solid rgba(245,240,232,0.08)', borderRadius: 7, padding: '5px 0', textAlign: 'center' as const, color: 'rgba(245,240,232,0.38)', fontFamily: 'Space Grotesk, sans-serif', fontSize: 8 }}>Later</div>
+          <div style={{ display: 'flex', gap: 26, alignItems: 'center' }}>
+            {([
+              { color: '#E63946', glow: 'rgba(230,57,70,0.5)' },
+              { color: '#F5C611', glow: 'rgba(245,198,17,0.5)' },
+              { color: '#2EB84B', glow: 'rgba(46,184,75,0.5)' },
+            ] as { color: string; glow: string }[]).map(({ color, glow }, i) => (
+              <div key={i} style={{
+                width: 58, height: 58, borderRadius: '50%',
+                background: `radial-gradient(circle at 38% 30%, ${color}FF, ${color}CC 55%, ${color}88 100%)`,
+                boxShadow: `0 8px 24px ${glow}, 0 2px 6px rgba(0,0,0,0.5), inset 0 -3px 6px rgba(0,0,0,0.25), inset 0 2px 3px rgba(255,255,255,0.12)`,
+                position: 'relative' as const,
+              }}>
+                <div style={{ position: 'absolute', top: '22%', left: '22%', width: '30%', height: '22%', borderRadius: '50%', background: 'rgba(255,255,255,0.2)', filter: 'blur(2px)' }} />
+              </div>
+            ))}
           </div>
         </div>
       </div>
+      <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: '0.6rem', color: 'rgba(245,240,232,0.18)', letterSpacing: '0.14em', textTransform: 'uppercase' as const }}>{label}</span>
     </div>
   )
 }
 
-function LaptopMockup() {
+function LaptopMockup({ tr }: { tr: CanvasTr }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  useEffect(() => { if (canvasRef.current) drawDashboard(canvasRef.current) }, [])
+  useEffect(() => { if (canvasRef.current) drawDashboard(canvasRef.current, tr) }, [tr])
 
   return (
     <div style={{ width: 420, userSelect: 'none' as const }}>
@@ -194,24 +195,10 @@ function Pill({ color, label, count }: { color: string; label: string; count: nu
   )
 }
 
-const COPY = {
-  p1: {
-    step: '01 — Alert', color: '#E63946',
-    headline: 'A guest signals.\nFeelix captures it\ninstantly.',
-    sub: 'One press at the table. No app. No delay. The moment is logged before they leave the seat.',
-  },
-  p2: {
-    step: '02 — Response', color: '#F5C611',
-    headline: 'Your team is alerted\nbefore they leave.',
-    sub: 'Real-time push. Table number. Time elapsed. Every detail needed to respond in seconds.',
-  },
-  p3: {
-    step: '03 — Result', color: '#2EB84B',
-    sub: 'of upset guests resolved\nbefore they reach the door.',
-  },
-}
-
 export default function HowItWorks() {
+  const { lang } = useLang()
+  const t = translations[lang].howItWorks
+
   const sectionRef      = useRef<HTMLDivElement>(null)
   const trackRef        = useRef<HTMLDivElement>(null)
   const p2CopyRef       = useRef<HTMLDivElement>(null)
@@ -265,12 +252,12 @@ export default function HowItWorks() {
   )
 
   return (
-    <section ref={sectionRef} style={{ height: '300vh', background: '#0A0A08', position: 'relative' }}>
+    <section ref={sectionRef} id="how-it-works" style={{ height: '300vh', background: '#0A0A08', position: 'relative' }}>
       <div style={{ position: 'sticky', top: 0, height: '100vh', overflow: 'hidden' }}>
 
         {/* Section label */}
         <div style={{ position: 'absolute', top: 36, left: '50%', transform: 'translateX(-50%)', zIndex: 10 }}>
-          <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500, fontSize: '0.65rem', letterSpacing: '0.14em', textTransform: 'uppercase' as const, color: 'rgba(245,240,232,0.25)' }}>How It Works</span>
+          <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 500, fontSize: '0.65rem', letterSpacing: '0.14em', textTransform: 'uppercase' as const, color: 'rgba(245,240,232,0.25)' }}>{t.label}</span>
         </div>
 
         {/* Progress dots */}
@@ -283,43 +270,43 @@ export default function HowItWorks() {
         {/* Horizontal track */}
         <div ref={trackRef} style={{ display: 'flex', width: '300vw', height: '100vh' }}>
 
-          {/* Panel 1 — Alert */}
+          {/* Panel 1 — Alerta */}
           <div style={{ width: '100vw', height: '100vh', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
             <div style={colCopy}>
-              {stepLabel(COPY.p1.step, COPY.p1.color)}
-              {headline(COPY.p1.headline)}
-              {sub(COPY.p1.sub)}
+              {stepLabel(t.p1.step, t.p1.color)}
+              {headline(t.p1.headline)}
+              {sub(t.p1.sub)}
             </div>
             <div style={colDevice}>
-              <PhoneMockup />
+              <TableDevice label={lang === 'es' ? 'Dispositivo de mesa Feelix' : 'Feelix Table Device'} />
             </div>
           </div>
 
           {/* Panel 2 — Response */}
           <div style={{ width: '100vw', height: '100vh', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
             <div style={colDevice}>
-              <LaptopMockup />
+              <LaptopMockup tr={t.canvas} />
             </div>
             <div ref={p2CopyRef} style={{ ...colCopy, opacity: 0 }}>
-              {stepLabel(COPY.p2.step, COPY.p2.color)}
-              {headline(COPY.p2.headline)}
-              {sub(COPY.p2.sub)}
+              {stepLabel(t.p2.step, t.p2.color)}
+              {headline(t.p2.headline)}
+              {sub(t.p2.sub)}
             </div>
           </div>
 
           {/* Panel 3 — Result */}
           <div style={{ width: '100vw', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             <div ref={p3WrapRef} style={{ opacity: 0, textAlign: 'center' as const, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 28 }}>
-              {stepLabel(COPY.p3.step, COPY.p3.color)}
+              {stepLabel(t.p3.step, t.p3.color)}
               <div style={{ display: 'flex', alignItems: 'flex-start', lineHeight: 1 }}>
                 <span ref={statRef} style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: 'clamp(5.5rem, 15vw, 12rem)', letterSpacing: '-0.06em', color: '#2EB84B', fontVariantNumeric: 'tabular-nums' }}>0</span>
                 <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: 'clamp(2.5rem, 6vw, 5rem)', color: '#2EB84B', letterSpacing: '-0.04em', paddingTop: '0.4em' }}>%</span>
               </div>
-              <p style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: '1.0625rem', lineHeight: 1.6, color: 'rgba(245,240,232,0.48)', maxWidth: '26ch', margin: 0, whiteSpace: 'pre-line' as const }}>{COPY.p3.sub}</p>
+              <p style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: '1.0625rem', lineHeight: 1.6, color: 'rgba(245,240,232,0.48)', maxWidth: '26ch', margin: 0, whiteSpace: 'pre-line' as const }}>{t.p3.sub}</p>
               <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' as const, justifyContent: 'center' }}>
-                <Pill color="#E63946" label="Alerts"   count={14}  />
-                <Pill color="#F5C611" label="Neutral"  count={38}  />
-                <Pill color="#2EB84B" label="Positive" count={247} />
+                <Pill color="#E63946" label={t.pills[0]} count={14}  />
+                <Pill color="#F5C611" label={t.pills[1]} count={38}  />
+                <Pill color="#2EB84B" label={t.pills[2]} count={247} />
               </div>
             </div>
           </div>

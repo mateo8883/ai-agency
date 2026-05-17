@@ -284,7 +284,6 @@ export default function ContactTransition() {
                   fontSize: '0.9375rem', letterSpacing: '-0.01em',
                   border: 'none', borderRadius: 100,
                   padding: '14px 38px',
-                  cursor: sending ? 'not-allowed' : 'pointer',
                   boxShadow: sending ? 'none' : '0 0 32px rgba(46,184,75,0.28)',
                   transition: 'all 0.2s',
                 }}

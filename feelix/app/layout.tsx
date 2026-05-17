@@ -2,20 +2,21 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { Toaster } from 'sonner'
 import SmoothScroll from '@/components/shared/SmoothScroll'
-import CustomCursor from '@/components/shared/CustomCursor'
+import Providers from '@/components/shared/Providers'
 
 export const metadata: Metadata = {
-  title: 'Feelix — Turn unhappy moments into loyal customers',
-  description: 'Physical feedback buttons for restaurants. One press, instant alert, second chance.',
+  title: 'Feelix — Convierte clientes insatisfechos en leales',
+  description: 'Botones físicos de retroalimentación para restaurantes. Un toque, alerta inmediata, segunda oportunidad.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="es">
       <body>
-        <CustomCursor />
-        <Toaster position="bottom-center" theme="dark" />
-        <SmoothScroll>{children}</SmoothScroll>
+        <Providers>
+          <Toaster position="bottom-center" theme="dark" />
+          <SmoothScroll>{children}</SmoothScroll>
+        </Providers>
       </body>
     </html>
   )

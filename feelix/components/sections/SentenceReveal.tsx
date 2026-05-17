@@ -2,17 +2,14 @@
 import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useLang } from '@/context/LanguageContext'
+import { translations } from '@/config/translations'
 
 gsap.registerPlugin(ScrollTrigger)
 
-const SENTENCES = [
-  { text: 'When a guest presses, Feelix logs the moment.', accent: false },
-  { text: 'Alerts your team in real time.',               accent: false },
-  { text: 'Tracks how fast they respond.',                accent: false },
-  { text: 'Turning every signal into the data behind a better restaurant.', accent: true },
-]
-
 export default function SentenceReveal() {
+  const { lang } = useLang()
+  const sentences = translations[lang].sentenceReveal
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -43,7 +40,7 @@ export default function SentenceReveal() {
         perspective: '800px',
       }}
     >
-      {SENTENCES.map(({ text, accent }, i) => (
+      {sentences.map(({ text, accent }, i) => (
         <p
           key={i}
           className="sr-sentence"
@@ -55,7 +52,7 @@ export default function SentenceReveal() {
             color: accent ? 'rgba(245,240,232,0.88)' : 'rgba(245,240,232,0.48)',
             textAlign: 'center',
             maxWidth: '38ch',
-            margin: i < SENTENCES.length - 1 ? '0 0 72px' : '0',
+            margin: i < sentences.length - 1 ? '0 0 72px' : '0',
             display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0 0.28em',
           }}
         >

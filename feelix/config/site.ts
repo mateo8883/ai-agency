@@ -1,103 +1,103 @@
 export const nav = {
-  links: ['Product', 'Pricing', 'Contact'],
-  cta: 'Get Started',
+  links: ['Producto', 'Precios', 'Contacto'],
+  cta: 'Comenzar',
 }
 
 export const hero = {
-  label: 'RESTAURANT FEEDBACK',
-  headline: 'Turn unhappy customers\ninto loyal customers.',
-  body: 'One press. Instant alert. Second chance.',
-  cta: 'Start free trial',
-  ctaSecondary: 'See how it works →',
+  label: 'EXPERIENCIA EN RESTAURANTE',
+  headline: 'Convierte clientes\ninsatisfechos en leales.',
+  body: 'Un toque. Alerta inmediata. Segunda oportunidad.',
+  cta: 'Prueba gratis',
+  ctaSecondary: 'Ver cómo funciona →',
 }
 
 export const socialProof = {
-  label: 'Trusted by 200+ restaurants',
+  label: 'Confiado por más de 200 restaurantes',
   names: ['La Mesa', 'Oro Kitchen', 'Brasa Group', 'The Palm House'],
 }
 
 export const whyItWorks = {
-  label: 'WHY IT WORKS',
-  headline: 'Built for every person\nin the room.',
+  label: 'POR QUÉ FUNCIONA',
+  headline: 'Diseñado para cada persona\nen el salón.',
   cards: [
     {
       color: 'green' as const,
-      title: 'For guests',
-      body: 'No app to download. No form to fill. No awkward conversation. Just a press at the end of a meal.',
+      title: 'Para los comensales',
+      body: 'Sin app que descargar. Sin formularios. Sin conversaciones incómodas. Solo un toque al final de la comida.',
     },
     {
       color: 'amber' as const,
-      title: 'For staff',
-      body: 'Clear signal. Exact table. No guessing. Respond while the guest is still there.',
+      title: 'Para el personal',
+      body: 'Señal clara. Mesa exacta. Sin conjeturas. Responde mientras el comensal aún está presente.',
     },
     {
       color: 'red' as const,
-      title: 'For owners',
-      body: 'Trend data. Response times. Weekly reports. See your restaurant the way your guests do.',
+      title: 'Para los dueños',
+      body: 'Datos y tendencias. Tiempos de respuesta. Reportes semanales. Ve tu restaurante como lo ven tus comensales.',
     },
   ],
 }
 
 export const dashboard = {
-  label: 'THE DASHBOARD',
-  headline: 'See your restaurant\nthe way your guests do.',
-  body: 'Real-time feedback. Response time tracking. Weekly trends. Every metric a restaurant owner needs.',
+  label: 'EL PANEL DE CONTROL',
+  headline: 'Ve tu restaurante\ncomo lo ven tus comensales.',
+  body: 'Retroalimentación en tiempo real. Seguimiento de respuestas. Tendencias semanales. Cada métrica que un dueño necesita.',
   stats: [
-    { value: '2m', label: 'avg. response time', color: 'green' as const },
-    { value: '94%', label: 'recovery rate', color: 'amber' as const },
+    { value: '2m', label: 'tiempo prom. de respuesta', color: 'green' as const },
+    { value: '94%', label: 'tasa de recuperación', color: 'amber' as const },
   ],
   overview: {
-    title: 'Weekly Overview',
-    subtitle: 'This week vs. last',
+    title: 'Resumen Semanal',
+    subtitle: 'Esta semana vs. la anterior',
     counts: [
-      { value: 247, label: 'Positive', color: 'green' as const },
+      { value: 247, label: 'Positivo', color: 'green' as const },
       { value: 38, label: 'Neutral', color: 'amber' as const },
-      { value: 14, label: 'Alerts', color: 'red' as const },
+      { value: 14, label: 'Alertas', color: 'red' as const },
     ],
-    days: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+    days: ['L', 'M', 'X', 'J', 'V', 'S', 'D'],
     bars: [65, 80, 55, 90, 75, 45, 70],
   },
 }
 
 export const testimonial = {
   quote:
-    'The first week we used Feelix we saved three tables that would have left a bad review. Now I can\'t imagine running without it.',
-  author: 'Carlos M. — Owner, La Mesa',
+    'La primera semana que usamos Feelix salvamos tres mesas que habrían dejado una mala reseña. Ahora no imagino operar sin él.',
+  author: 'Carlos M. — Dueño, La Mesa',
 }
 
 export const pricing = {
-  label: 'PRICING',
-  headline: 'Simple pricing.',
+  label: 'PRECIOS',
+  headline: 'Precios simples.',
   plans: [
     {
-      name: 'Starter',
+      name: 'Básico',
       price: { monthly: 49, annual: 39 },
-      features: ['1 location', '3 buttons', 'Email alerts', 'Monthly report'],
-      cta: 'Get started',
+      features: ['1 ubicación', '3 botones', 'Alertas por email', 'Reporte mensual'],
+      cta: 'Comenzar',
       recommended: false,
     },
     {
-      name: 'Growth',
+      name: 'Crecimiento',
       price: { monthly: 99, annual: 79 },
-      features: ['3 locations', 'Unlimited buttons', 'Instant alerts', 'Weekly reports', 'Response analytics'],
-      cta: 'Start free trial',
+      features: ['3 ubicaciones', 'Botones ilimitados', 'Alertas instantáneas', 'Reportes semanales', 'Análisis de respuestas'],
+      cta: 'Prueba gratis',
       recommended: true,
     },
     {
-      name: 'Enterprise',
+      name: 'Empresarial',
       price: { monthly: 249, annual: 199 },
-      features: ['Unlimited locations', 'Unlimited buttons', 'Priority support', 'Custom integrations', 'Dedicated CSM'],
-      cta: 'Contact us',
+      features: ['Ubicaciones ilimitadas', 'Botones ilimitados', 'Soporte prioritario', 'Integraciones personalizadas', 'Gerente dedicado'],
+      cta: 'Contáctanos',
       recommended: false,
     },
   ],
 }
 
 export const finalCta = {
-  headline: 'Your next unhappy customer\nis your next loyal customer.',
-  cta: 'Start free trial',
+  headline: 'Tu próximo cliente insatisfecho\nes tu próximo cliente leal.',
+  cta: 'Prueba gratis',
 }
 
 export const footer = {
-  links: ['Product', 'Pricing', 'Contact', 'Privacy'],
+  links: ['Producto', 'Precios', 'Contacto', 'Privacidad'],
 }

@@ -2,11 +2,15 @@
 import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { finalCta } from '@/config/site'
+import { useLang } from '@/context/LanguageContext'
+import { translations } from '@/config/translations'
 
 gsap.registerPlugin(ScrollTrigger)
 
 export default function FinalCTA() {
+  const { lang } = useLang()
+  const finalCta = translations[lang].finalCta
+
   const sectionRef = useRef<HTMLDivElement>(null)
   const innerRef   = useRef<HTMLDivElement>(null)
 
