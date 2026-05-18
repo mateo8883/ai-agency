@@ -6,7 +6,7 @@ import Providers from '@/components/shared/Providers'
 
 export const metadata: Metadata = {
   title: 'Feelix — Convierte clientes insatisfechos en leales',
-  description: 'Botones físicos de retroalimentación para restaurantes. Un toque, alerta inmediata, segunda oportunidad.',
+  description: 'Botones físicos de retroalimentación para tu negocio. Un toque, alerta inmediata, segunda oportunidad.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
